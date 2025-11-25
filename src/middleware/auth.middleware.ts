@@ -5,6 +5,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import * as crypto from 'crypto';
+import rateLimit from 'express-rate-limit';
 import { getValidTokens, isAuthenticated } from '../services/oauth.service';
 import { config } from '../config';
 
@@ -18,6 +19,58 @@ declare global {
     }
   }
 }
+
+/**
+ * Rate limiter for API endpoints
+ * Limits requests to prevent abuse
+ */
+export const apiRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: {
+    success: false,
+    error: {
+      code: 'RATE_LIMIT_EXCEEDED',
+      message: 'Too many requests, please try again later.'
+    }
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+/**
+ * Stricter rate limiter for sensitive operations like file uploads
+ */
+export const uploadRateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 50, // Limit each IP to 50 uploads per hour
+  message: {
+    success: false,
+    error: {
+      code: 'RATE_LIMIT_EXCEEDED',
+      message: 'Too many upload requests, please try again later.'
+    }
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+/**
+ * Rate limiter for OAuth endpoints
+ */
+export const authRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 auth requests per 15 minutes
+  message: {
+    success: false,
+    error: {
+      code: 'RATE_LIMIT_EXCEEDED',
+      message: 'Too many authentication requests, please try again later.'
+    }
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
 
 /**
  * Middleware to validate HubSpot authentication

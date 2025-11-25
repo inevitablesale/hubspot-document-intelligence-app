@@ -12,7 +12,12 @@ import {
   webhookRoutes,
   healthRoutes
 } from './routes';
-import { errorHandler, requestLogger } from './middleware/auth.middleware';
+import {
+  errorHandler,
+  requestLogger,
+  apiRateLimiter,
+  authRateLimiter
+} from './middleware/auth.middleware';
 
 /**
  * Create and configure the Express application
@@ -33,11 +38,11 @@ export function createApp(): Express {
   // Request logging
   app.use(requestLogger);
 
-  // Routes
-  app.use('/oauth', oauthRoutes);
-  app.use('/api/documents', documentRoutes);
-  app.use('/api/crm-card', crmCardRoutes);
-  app.use('/api/webhooks', webhookRoutes);
+  // Routes with rate limiting
+  app.use('/oauth', authRateLimiter, oauthRoutes);
+  app.use('/api/documents', apiRateLimiter, documentRoutes);
+  app.use('/api/crm-card', apiRateLimiter, crmCardRoutes);
+  app.use('/api/webhooks', apiRateLimiter, webhookRoutes);
   app.use('/health', healthRoutes);
 
   // Root endpoint

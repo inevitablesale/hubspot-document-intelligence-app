@@ -7,7 +7,7 @@ import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import * as path from 'path';
 import { randomUUID } from 'crypto';
-import { requireAuth } from '../middleware/auth.middleware';
+import { requireAuth, uploadRateLimiter } from '../middleware/auth.middleware';
 import {
   validateUpload,
   getUploadDir,
@@ -45,7 +45,7 @@ const router = Router();
  * POST /api/documents/upload
  * Upload and analyze a document
  */
-router.post('/upload', requireAuth, upload.single('document'), async (req: Request, res: Response) => {
+router.post('/upload', uploadRateLimiter, requireAuth, upload.single('document'), async (req: Request, res: Response) => {
   const { dealId } = req.body;
 
   if (!dealId) {

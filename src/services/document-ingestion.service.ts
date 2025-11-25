@@ -23,7 +23,7 @@ export async function parsePdf(filePath: string): Promise<ParsedDocument> {
 
   return {
     text: textResult.text,
-    pages: textResult.pages?.length || 1,
+    pages: textResult.total || textResult.pages?.length || 1,
     metadata: {
       title: infoResult.info?.title || '',
       author: infoResult.info?.author || '',
