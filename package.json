@@ -1,0 +1,50 @@
+{
+  "name": "hubspot-document-intelligence-app",
+  "version": "1.0.0",
+  "description": "Installable HubSpot App that analyzes uploaded documents—contracts, proposals, NDAs, PDFs—and extracts key terms, risks, blockers, and insights using AI. Generates a Document Risk Score, highlights missing requirements, and surfaces findings directly on deal records. Helps revenue teams predict delays, prevent surprises, and accelerate deal cycles.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "tsc && node dist/app.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "hubspot",
+    "document-analysis",
+    "ai",
+    "ocr",
+    "pdf",
+    "contracts",
+    "risk-assessment",
+    "crm"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@hubspot/api-client": "^13.4.0",
+    "express": "^5.1.0",
+    "multer": "^2.0.2",
+    "openai": "^6.9.1",
+    "pdf-parse": "^2.4.5",
+    "tesseract.js": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/jest": "^30.0.0",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.10.1",
+    "@types/supertest": "^6.0.3",
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.9.3"
+  }
+}
